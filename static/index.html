@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concurrent Job Scheduling & Resource Management</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="eyebrow">HOME SQUAD · T253 · PHASE II</div>
+    <h1>Concurrent Job Scheduling</h1>
+    <p>Simulate CPU scheduling, memory allocation, resource dependencies and deadlock recovery.</p>
+    <div class="pill">Educational simulation · Does not monitor real hardware</div>
+  </header>
+  <main>
+    <section class="panel">
+      <div class="section-heading">
+        <div><span class="step">01</span><h2>Configure simulation</h2></div>
+        <button class="button secondary" id="resetBtn" type="button">Load example jobs</button>
+      </div>
+      <div class="settings-grid">
+        <label>Scheduling algorithm
+          <select id="algorithm">
+            <option>FCFS</option><option>SJF</option><option>Priority</option><option>Round Robin</option>
+          </select>
+        </label>
+        <label>Round Robin quantum
+          <input id="quantum" type="number" min="1" value="2">
+        </label>
+        <label>Total simulated memory (MB)
+          <input id="memory" type="number" min="1" value="1024">
+        </label>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Job</th><th>Arrival</th><th>CPU burst</th><th>Priority</th><th>Memory MB</th><th>Holds resources</th><th>Requests resources</th><th></th></tr></thead>
+          <tbody id="jobRows"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button class="button secondary" id="addJobBtn" type="button">+ Add job</button>
+        <button class="button primary" id="runBtn" type="button">Run simulation</button>
+      </div>
+      <p class="hint">Resource names are case-sensitive. Use commas for multiple resources. For a deadlock demo, make Job A hold Printer/request Scanner and Job B hold Scanner/request Printer.</p>
+      <div id="errorBox" class="error hidden" role="alert"></div>
+    </section>
+
+    <section id="results" class="hidden">
+      <div class="section-heading results-heading"><div><span class="step">02</span><h2>Resource monitor</h2></div><span id="algorithmBadge" class="badge">FCFS</span></div>
+      <div id="metrics" class="metrics"></div>
+      <div class="two-col">
+        <section class="panel subpanel"><h3>Job status & recovery</h3><div class="table-wrap"><table><thead><tr><th>Job</th><th>Status</th><th>CPU</th><th>Memory</th><th>Wait</th><th>Turnaround</th><th>Recovery</th></tr></thead><tbody id="resultRows"></tbody></table></div></section>
+        <section class="panel subpanel"><h3>Wait-for graph</h3><p class="muted">An edge A → B means A is waiting for a resource held by B. A cycle indicates simulated deadlock.</p><div id="graph" class="graph"></div><div id="deadlockNotice"></div></section>
+      </div>
+      <section class="panel"><h3>CPU timeline</h3><p class="muted">Timeline segments represent simulated CPU execution or idle time.</p><div id="timeline" class="timeline"></div><div id="timelineScale" class="timeline-scale"></div></section>
+      <section class="panel"><h3>Resource events</h3><div id="events" class="events"></div></section>
+    </section>
+    <footer>Concurrent Job Scheduling and Resource Management System · Phase II prototype</footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
