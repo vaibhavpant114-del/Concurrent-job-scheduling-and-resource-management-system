@@ -87,3 +87,7 @@ concurrent_job_scheduling_system/
 - Smaller priority values represent higher priority.
 - The deadlock demonstration is intentionally controllable: jobs declare exclusive resources they hold and request so a wait-for cycle can be constructed.
 - The current build is a Phase II implementation scaffold; do not claim PostgreSQL persistence, crash restoration, or an interactive playback Gantt chart is complete.
+
+# Concurrent-job-scheduling-and-resource-management-system
+Concurrant job scheduling and resource management system
+dc15e3550fe3f23fa717a3f17f4abc3ac0acfdf0
