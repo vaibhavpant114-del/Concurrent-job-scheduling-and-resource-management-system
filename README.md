@@ -1,93 +1,40 @@
 # Concurrent Job Scheduling and Resource Management System
-**Team:** Home Squad · **Course/Project ID:** OSDBMS-V-2026-T253  
-**Phase:** II — simulated CPU/memory monitoring, resource availability, deadlock detection and recovery.
+Team Home Squad (T253) - OSDBMS-V-2026-T253
 
-## Features
-- Job input: arrival time, CPU burst, priority, memory requirement, held resources and requested resources.
-- Scheduling policies: FCFS, SJF, Priority (smaller number means higher priority), and Round Robin.
-- Simulated CPU utilization, job completion/waiting metrics, memory capacity and resource allocation/release events.
-- Wait-for graph and cycle-based deadlock detection.
-- Recovery action for waiting/deadlocked jobs: cancel or roll back, releasing resources held by that job.
-- FastAPI JSON API and browser-based dashboard.
-- This Phase II build keeps the latest simulation in process memory. PostgreSQL-backed persistent history, crash recovery and replay, and interactive step-by-step Gantt controls remain Phase III work, as specified in the report.
+Teaching tool: FCFS, SJF, Priority and Round Robin scheduling, simulated CPU/memory monitor,
+deadlock detection/recovery (wait-for graph), saved history with crash recovery, and an
+interactive Gantt chart with step/auto playback and four-rule comparison.
+CPU and memory values are simulated; the real computer is never measured or controlled.
 
-## Requirements
-- Python 3.10 or newer
-- macOS, Windows, or Linux
-- Internet is needed only to install Python packages (unless already cached).
-- PostgreSQL is **not required to run this Phase II demo**. The report identifies PostgreSQL persistence as planned/Phase III work.
+## Run in VS Code (Windows)
+1. Install Python 3.10+ (tick "Add Python to PATH") and VS Code with the Python extension.
+2. File > Open Folder... > choose this folder.
+3. Terminal > New Terminal, then:
+       python -m venv .venv
+       .venv\Scripts\activate
+       pip install -r requirements.txt
+   (macOS/Linux: `python3 -m venv .venv` and `source .venv/bin/activate`)
+4. Start the server:
+       uvicorn backend.main:app --reload
+5. Open http://127.0.0.1:8000 (API docs: http://127.0.0.1:8000/docs).
 
-## Run on macOS
-1. Unzip the project.
-2. Open Terminal and enter the project directory, for example:
-   ```bash
-   cd ~/Downloads/concurrent_job_scheduling_system
-   ```
-3. Create a virtual environment:
-   ```bash
-   python3 -m venv .venv
-   ```
-4. Activate it:
-   ```bash
-   source .venv/bin/activate
-   ```
-5. Install dependencies:
-   ```bash
-   python3 -m pip install -r requirements.txt
-   ```
-6. Start the server:
-   ```bash
-   python3 -m uvicorn main:app --reload
-   ```
-7. Open **http://127.0.0.1:8000** in your browser.
-8. API documentation is at **http://127.0.0.1:8000/docs**.
+By default data is saved in a local SQLite file (jobsched.db). To use PostgreSQL:
+create a database (`CREATE DATABASE jobsched;`), copy `.env.example` to `.env`, and set
+`DATABASE_URL=postgresql+psycopg2://postgres:PASSWORD@localhost:5432/jobsched`.
+Tables are created automatically (see database/schema.sql).
 
-## Run on Windows
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m uvicorn main:app --reload
-```
-If PowerShell blocks activation, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in that terminal, then activate again.
+## Deadlock demo
+Each job has **Holds** and **Waits for** columns (e.g. Holds `R1`, Waits for `R2`). If job A waits
+for a resource job B holds, the wait-for graph draws A -> B. Click **Load deadlock example**, then
+**Detect deadlock** to see the loop in red, and **Recover** to stop a victim job. Simulations are
+refused while a deadlock exists among the jobs.
 
-## Try the demo
-The page starts with three example jobs. Click **Run simulation** and inspect the schedule, resource metrics, timeline, wait-for graph and deadlock status.
+## Tests
+    python -m pytest -q tests
 
-To demonstrate deadlock, create two jobs with:
-- Job A holds `Printer` and requests `Scanner`
-- Job B holds `Scanner` and requests `Printer`
-
-Use the exact same spelling for resource names. Run the simulation. The wait-for graph should show a cycle. Use **Cancel** or **Roll back** on one of the waiting/deadlocked jobs to demonstrate resource release.
-
-## API endpoints
-- `GET /api/health` — server status
-- `POST /api/simulate` — validate jobs and run selected scheduling simulation
-- `GET /api/result` — latest in-memory result
-- `POST /api/recover` — cancel/roll back a waiting or deadlocked job
-- `GET /docs` — interactive Swagger API documentation
-
-## Project structure
-```text
-concurrent_job_scheduling_system/
-├── main.py
-├── requirements.txt
-├── README.md
-├── static/
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-└── tests/
-    └── test_api.py
-```
-
-## Notes for the project viva
-- This is a **simulation**, not a monitor of real computer CPU or RAM.
-- CPU utilization is computed from simulated busy time / simulated elapsed time.
-- Smaller priority values represent higher priority.
-- The deadlock demonstration is intentionally controllable: jobs declare exclusive resources they hold and request so a wait-for cycle can be constructed.
-- The current build is a Phase II implementation scaffold; do not claim PostgreSQL persistence, crash restoration, or an interactive playback Gantt chart is complete.
-
-# Concurrent-job-scheduling-and-resource-management-system
-Concurrant job scheduling and resource management system
-dc15e3550fe3f23fa717a3f17f4abc3ac0acfdf0
+## Folders
+- backend/engine.py    scheduler, simulated memory, step-by-step engine, save/restore state
+- backend/deadlock.py  wait-for graph, loop detection, recovery
+- backend/storage.py   database tables, one-transaction saves, history, recovery queries
+- backend/main.py      FastAPI routes
+- frontend/            dashboard, Gantt chart, playback, history, live run, deadlock panel
