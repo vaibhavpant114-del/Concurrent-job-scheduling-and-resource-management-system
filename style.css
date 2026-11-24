@@ -1,0 +1,52 @@
+:root{--ink:#16232e;--paper:#f3f5f2;--card:#fff;--line:#d5dbd6;--teal:#0f766e;--amber:#d98e04;--red:#b42318;--mute:#5c6b66}
+@media (prefers-color-scheme:dark){:root{--ink:#e6ece8;--paper:#11181b;--card:#182125;--line:#2c3a3f;--teal:#2dd4bf;--amber:#f0b429;--red:#f97066;--mute:#93a39d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,sans-serif}
+header{padding:28px max(20px,5vw) 8px}
+h1{font:600 26px/1.2 Georgia,"Times New Roman",serif;margin:0 0 4px}
+h2{font:600 18px Georgia,serif;margin:0 0 10px}
+header p{margin:0;color:var(--mute)}
+main{padding:8px max(20px,5vw) 60px;display:grid;gap:18px}
+section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;overflow-x:auto}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+input,select,textarea{font:inherit;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=number]{width:100px}#jName{width:130px}
+textarea{width:100%;font-family:Consolas,monospace}
+button{font:inherit;cursor:pointer;border:1px solid var(--teal);background:var(--teal);color:#fff;border-radius:6px;padding:6px 12px}
+button.ghost{background:transparent;color:var(--teal)}
+button.danger{background:var(--red);border-color:var(--red)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.hint{color:var(--mute);margin:4px 0}.empty{color:var(--mute)}
+table{border-collapse:collapse;width:100%;margin-top:8px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--mute)}
+td button{padding:2px 8px;font-size:13px}
+#scrub{flex:1;min-width:140px}
+#clock{font-variant-numeric:tabular-nums;min-width:110px}
+#legend{font-size:13px;color:var(--mute);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sw{display:inline-block;width:14px;height:10px;border-radius:2px;margin-left:10px}
+.sw.wait{background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px)}
+.sw.idle{background:var(--mute);opacity:.45}
+.mk{display:inline-block;width:2px;height:12px;background:var(--red);margin-left:10px}
+.fin{display:inline-block;width:0;height:0;border:5px solid transparent;border-bottom:8px solid var(--ink);margin-left:10px}
+.gantt{margin:14px 0 22px;min-width:560px}
+.gantt h3{font:600 15px "Segoe UI",sans-serif;margin:0 0 6px}
+.row{display:flex;align-items:center;height:30px}
+.lab{width:110px;flex:none;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{position:relative;flex:1;height:22px;border-left:1px solid var(--line);background:linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/var(--unit) 100%}
+.blk{position:absolute;top:0;height:100%;border-radius:3px;color:#fff;font-size:11px;text-align:center;line-height:22px;overflow:hidden}
+.blk.wait{background:repeating-linear-gradient(45deg,var(--line),var(--line) 3px,transparent 3px,transparent 6px);height:8px;top:7px;border-radius:0}
+.blk.idle{background:var(--mute);opacity:.45}
+.sw-line{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--red);z-index:2}
+.fin-mark{position:absolute;top:100%;width:0;height:0;border:5px solid transparent;border-bottom:8px solid var(--ink);transform:translateX(-5px);margin-top:-6px}
+.axis{display:flex;margin-left:110px;position:relative;height:18px;font-size:11px;color:var(--mute)}
+.axis span{position:absolute;transform:translateX(-50%)}
+.cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--amber);z-index:3}
+.mem{height:14px;background:var(--paper);border:1px solid var(--line);border-radius:7px;overflow:hidden;max-width:420px}
+.mem i{display:block;height:100%;background:var(--teal)}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;border:1px solid var(--line);font-size:12px}
+.tag.RUNNING{background:var(--teal);color:#fff}.tag.FINISHED{color:var(--mute)}.tag.WAITING{border-color:var(--amber);color:var(--amber)}
+pre{background:var(--paper);padding:10px;border-radius:6px;white-space:pre-wrap;margin:8px 0 0}
+@media (prefers-reduced-motion:no-preference){.blk{transition:width .2s}}
+#jHold,#jWait{width:160px}
+#dlGraph svg{width:100%;max-width:620px;height:auto;display:block}

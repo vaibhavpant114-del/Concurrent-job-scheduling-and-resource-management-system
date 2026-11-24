@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Job Scheduling and Resource Management</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>Concurrent Job Scheduling and Resource Management</h1>
+  <p>Learn how a computer picks the next job. CPU and memory numbers are simulated.</p>
+</header>
+<main>
+  <section id="jobs">
+    <h2>Jobs</h2>
+    <form id="jobForm" onsubmit="return false">
+      <input id="jName" placeholder="Name" required>
+      <input id="jArr" type="number" min="0" placeholder="Arrival" required>
+      <input id="jBur" type="number" min="1" placeholder="CPU time" required>
+      <input id="jPri" type="number" min="1" placeholder="Priority" required>
+      <input id="jMem" type="number" min="1" placeholder="Memory MB" required>
+      <input id="jHold" placeholder="Holds e.g. R1,R2">
+      <input id="jWait" placeholder="Waits for e.g. R3">
+      <button id="addJob">Add job</button>
+      <button id="sampleJobs" type="button" class="ghost">Load sample jobs</button>
+      <button id="clearJobs" type="button" class="ghost">Clear all</button>
+    </form>
+    <p class="hint">Lower priority number = more urgent. Total simulated memory: 1024 MB.</p>
+    <table id="jobTable"><thead><tr><th>ID</th><th>Name</th><th>Arrival</th><th>CPU time</th><th>Priority</th><th>Memory</th><th>Holds</th><th>Waits for</th><th></th></tr></thead><tbody></tbody></table>
+  </section>
+
+  <section id="timeline">
+    <h2>Timeline</h2>
+    <div class="bar">
+      <label>Rule
+        <select id="algo"><option value="FCFS">FCFS</option><option value="SJF">SJF</option><option value="PRIORITY">Priority</option><option value="RR">Round Robin</option></select>
+      </label>
+      <label>Time slice <input id="quantum" type="number" min="1" value="2"></label>
+      <button id="runBtn">Run and save</button>
+      <button id="compareBtn" class="ghost">Compare all four rules</button>
+    </div>
+    <div class="bar playback">
+      <button id="bReset" title="Back to start">Start</button>
+      <button id="bPrev" title="Back one time unit">-1</button>
+      <button id="bPlay">Play</button>
+      <button id="bNext" title="Forward one time unit">+1</button>
+      <button id="bEnd" title="Show all">End</button>
+      <label>Speed <select id="speed"><option value="1000">Slow</option><option value="500" selected>Normal</option><option value="200">Fast</option></select></label>
+      <input id="scrub" type="range" min="0" max="0" value="0">
+      <span id="clock">t = 0 / 0</span>
+    </div>
+    <div id="legend"><span class="sw wait"></span>waiting <span class="sw idle"></span>CPU idle <span class="mk"></span>job switch <span class="fin"></span>finished</div>
+    <div id="view"><p class="empty">Add jobs, then choose “Run and save” to see the chart.</p></div>
+    <div id="metrics"></div>
+  </section>
+
+  <section id="live">
+    <h2>Live run, saved step by step, with crash recovery</h2>
+    <div class="bar">
+      <button id="lStart">Start live run</button>
+      <button id="lStep">Step +1</button>
+      <button id="lStep5" class="ghost">Step +5</button>
+      <button id="lCrash" class="danger">Simulate crash</button>
+      <button id="lRecover">Recover from database</button>
+    </div>
+    <p id="liveMsg" class="hint"></p>
+    <div id="monitor"></div>
+  </section>
+
+  <section id="deadlock">
+    <h2>Deadlock check (wait-for graph)</h2>
+    <p class="hint">Uses the <b>Holds</b> and <b>Waits for</b> columns of the jobs above. If job A waits for a resource that job B holds, the graph draws A &rarr; B. A closed loop is a deadlock.</p>
+    <div class="bar">
+      <button id="dlDetect">Detect deadlock</button>
+      <button id="dlRecover" class="danger">Recover (stop victim jobs)</button>
+      <button id="dlExample" class="ghost">Load deadlock example</button>
+    </div>
+    <div id="dlGraph"></div>
+    <pre id="dlOut"></pre>
+  </section>
+
+  <section id="history">
+    <h2>History</h2>
+    <table id="runTable"><thead><tr><th>Run</th><th>Rule</th><th>Status</th><th>Time</th><th>Saved at</th><th></th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>
